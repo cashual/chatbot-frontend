@@ -3,46 +3,42 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
-
-<link rel="import" href="shared-styles.html">
-
 <dom-module id="chatbot-ing-app">
   <template>
-      <style include="shared-styles">
+      <style>
 			:host {
 				display: block;
 				padding: 10px;
 			}
-			.mt-20{
-				margin-top: 20px;
+			.top-20{
+				margin-top: 40px;
 			}
-		</style>
+    </style>
+    </br>
+    </br>
+    </br>
+    <div>
+        {{displayMessage}}
+    </div>
+    </br>
+    </br>
+    </br>
+      
 		<div>
-			<paper-input value="{{user_message}}" label="chat with me"></paper-input>
+			<paper-input value="{{user_message}}" label="who are you?"></paper-input>
 		</div>
-		<div class="mt-20">
+		<div class="top-20">
 			<paper-button raised on-tap="sendData">POST REQUEST</paper-button>
-		</div>
-		<div>
-			  {{ssoDisplay}}
-		</div>
-		<div>
-			  {{serverErrorObj}}
-		</div>
-
+    </div>
 
     <iron-ajax
 				url="http://localhost:4040/"
-				id="postExample"
+				id="postMessage"
 				handle-as="json"
 				content-type="application/json"
 				method="POST"
 				body='{{postBody}}'
-				on-response="serverSuccessCb"
-				last-response="{{serverSuccessObj}}"
-				on-error="serverErrorCb"
-				last-error="{{serverErrorObj}}">
-		</iron-ajax>
+				last-response="{{serverSuccessMessage}}"></iron-ajax>
 
   </template>
 
@@ -60,20 +56,22 @@
             type: String,
             notify: true,
           },
+          getBody: {
+            typr: String
+          },
           postBody: {
             type: String,
             computed: 'getPostBody(user_message)'
           },
-          serverErrorObj: Object,
-          serverSuccessObj: Object,
-          ssoDisplay: {
+          serverSuccessMessage: Object,
+          displayMessage: {
             type: String,
-            computed: 'getSso(serverSuccessObj)'
+            computed: 'getMessageFromServer(serverSuccessMessage)'
           }
         } 
       }
       sendData (event) {
-            this.$.postExample.generateRequest();
+            this.$.postMessage.generateRequest();
       }
       getPostBody (user_message) {
           return {
@@ -82,12 +80,11 @@
       }
       serverSuccessCb () {}
       serverErrorCb () {}
-      getSso (serverSuccessObj) {
-            return JSON.stringify(serverSuccessObj);
+      getMessageFromServer (serverSuccessMessage) {
+            return JSON.stringify(serverSuccessMessage);
       }
     }
     
-
     window.customElements.define(ChatbotIngApp.is, ChatbotIngApp);
   </script>
 </dom-module>
