@@ -1,0 +1,93 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="chatbot-ing-app">
+  <template>
+      <style include="shared-styles">
+			:host {
+				display: block;
+				padding: 10px;
+			}
+			.mt-20{
+				margin-top: 20px;
+			}
+		</style>
+		<div>
+			<paper-input value="{{user_message}}" label="chat with me"></paper-input>
+		</div>
+		<div class="mt-20">
+			<paper-button raised on-tap="sendData">POST REQUEST</paper-button>
+		</div>
+		<div>
+			  {{ssoDisplay}}
+		</div>
+		<div>
+			  {{serverErrorObj}}
+		</div>
+
+
+    <iron-ajax
+				url="http://localhost:4040/"
+				id="postExample"
+				handle-as="json"
+				content-type="application/json"
+				method="POST"
+				body='{{postBody}}'
+				on-response="serverSuccessCb"
+				last-response="{{serverSuccessObj}}"
+				on-error="serverErrorCb"
+				last-error="{{serverErrorObj}}">
+		</iron-ajax>
+
+  </template>
+
+  <script>
+
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ChatbotIngApp extends Polymer.Element {
+      static get is() { return 'chatbot-ing-app'; }
+      static get properties() {
+        return {
+          user_message: {
+            type: String,
+            notify: true,
+          },
+          postBody: {
+            type: String,
+            computed: 'getPostBody(user_message)'
+          },
+          serverErrorObj: Object,
+          serverSuccessObj: Object,
+          ssoDisplay: {
+            type: String,
+            computed: 'getSso(serverSuccessObj)'
+          }
+        } 
+      }
+      sendData (event) {
+            this.$.postExample.generateRequest();
+      }
+      getPostBody (user_message) {
+          return {
+              "message": user_message
+          }
+      }
+      serverSuccessCb () {}
+      serverErrorCb () {}
+      getSso (serverSuccessObj) {
+            return JSON.stringify(serverSuccessObj);
+      }
+    }
+    
+
+    window.customElements.define(ChatbotIngApp.is, ChatbotIngApp);
+  </script>
+</dom-module>
