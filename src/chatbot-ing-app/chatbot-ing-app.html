@@ -13,29 +13,10 @@ iron-swipeable-container.git#*
 				display: block;
 				padding: 10px;
 			}
-			.top-20{
-				margin-top: 40px;
-			}
-      .swipe {
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-        cursor: default;
-      }
     </style>
-    </br>
-    </br>
-    </br>
-    <div>
-        {{displayMessage}}
-    </div>
-    </br>
-    </br>
-    </br>
-      
+    
 		<paper-input value="{{user_question}}" label="Please how can i help you?"></paper-input>
-		<div class="top-20">
+		<div>
 			<paper-button raised on-tap="sendQuestion">Ask me!</paper-button>
     </div>
 
@@ -45,8 +26,7 @@ iron-swipeable-container.git#*
 				handle-as="json"
 				content-type="application/json"
 				method="POST"
-				body='{{postBody}}'
-				last-response="{{serverSuccessMessage}}"></iron-ajax>
+				body='{{postBody}}'></iron-ajax>
   </template>
 
   <script>
@@ -69,11 +49,6 @@ iron-swipeable-container.git#*
           postBody: {
             type: String,
             computed: 'getPostBody(user_question)'
-          },
-          serverSuccessMessage: Object,
-          displayMessage: {
-            type: String,
-            computed: 'getMessageFromServer(serverSuccessMessage)'
           }
         } 
       }
@@ -84,10 +59,6 @@ iron-swipeable-container.git#*
           return {
               "question": user_question
           }
-      }
-      serverSuccessCb () {}
-      getMessageFromServer (serverSuccessMessage) {
-            return JSON.stringify(serverSuccessMessage);
       }
     }
     
