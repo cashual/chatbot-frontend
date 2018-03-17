@@ -2,6 +2,9 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+iron-swipeable-container.git#*
 
 <dom-module id="chatbot-ing-app">
   <template>
@@ -13,6 +16,13 @@
 			.top-20{
 				margin-top: 40px;
 			}
+      .swipe {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+      }
     </style>
     </br>
     </br>
@@ -24,22 +34,19 @@
     </br>
     </br>
       
-		<div>
-			<paper-input value="{{user_message}}" label="who are you?"></paper-input>
-		</div>
+		<paper-input value="{{user_question}}" label="Please how can i help you?"></paper-input>
 		<div class="top-20">
-			<paper-button raised on-tap="sendData">POST REQUEST</paper-button>
+			<paper-button raised on-tap="sendQuestion">Ask me!</paper-button>
     </div>
 
     <iron-ajax
-				url="http://localhost:4040/"
+				url="http://localhost:9292/question"
 				id="postMessage"
 				handle-as="json"
 				content-type="application/json"
 				method="POST"
 				body='{{postBody}}'
 				last-response="{{serverSuccessMessage}}"></iron-ajax>
-
   </template>
 
   <script>
@@ -52,7 +59,7 @@
       static get is() { return 'chatbot-ing-app'; }
       static get properties() {
         return {
-          user_message: {
+          user_question: {
             type: String,
             notify: true,
           },
@@ -61,7 +68,7 @@
           },
           postBody: {
             type: String,
-            computed: 'getPostBody(user_message)'
+            computed: 'getPostBody(user_question)'
           },
           serverSuccessMessage: Object,
           displayMessage: {
@@ -70,16 +77,15 @@
           }
         } 
       }
-      sendData (event) {
+      sendQuestion (event) {
             this.$.postMessage.generateRequest();
       }
-      getPostBody (user_message) {
+      getPostBody (user_question) {
           return {
-              "message": user_message
+              "question": user_question
           }
       }
       serverSuccessCb () {}
-      serverErrorCb () {}
       getMessageFromServer (serverSuccessMessage) {
             return JSON.stringify(serverSuccessMessage);
       }
