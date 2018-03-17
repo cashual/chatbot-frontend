@@ -4,29 +4,42 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 
-iron-swipeable-container.git#*
+
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../bower_components/app-layout/app-layout.html"
+<link rel="import" href="chat-thread-list.html">
+<link rel="import" href="chat-thread-view.html">
+
 
 <dom-module id="chatbot-ing-app">
   <template>
       <style>
 			:host {
-				display: block;
-				padding: 10px;
+        font-family: 'Muli', 'Helvetica Neue', helvetica, arial;
+        display: block;
 			}
     </style>
     
-		<paper-input value="{{user_question}}" label="Please how can i help you?"></paper-input>
+		<!-- <paper-input value="{{user_question}}" label="Please how can i help you?"></paper-input>
 		<div>
 			<paper-button raised on-tap="sendQuestion">Ask me!</paper-button>
-    </div>
+    </div> -->
 
-    <iron-ajax
+    <iron-ajax url="threads.json" last-response="{{threads}}" auto></iron-ajax>
+
+    <app-layout>
+      <chat-thread-list drawer user="{{user}}" threads="{{threads}}" selected-thread="{{selectedThread}}"></chat-thread-list>
+
+      <chat-thread-view main user="{{user}}" thread="{{selectedThread}}"></chat-thread-view>
+    </app-layout>
+
+    <!-- <iron-ajax
 				url="http://localhost:9292/question"
 				id="postMessage"
 				handle-as="json"
 				content-type="application/json"
 				method="POST"
-				body='{{postBody}}'></iron-ajax>
+				body='{{postBody}}'></iron-ajax> -->
   </template>
 
   <script>
@@ -39,27 +52,33 @@ iron-swipeable-container.git#*
       static get is() { return 'chatbot-ing-app'; }
       static get properties() {
         return {
-          user_question: {
-            type: String,
-            notify: true,
-          },
-          getBody: {
-            typr: String
-          },
-          postBody: {
-            type: String,
-            computed: 'getPostBody(user_question)'
+          // user_question: {
+          //   type: String,
+          //   notify: true,
+          // },
+          // getBody: {
+          //   typr: String
+          // },
+          // postBody: {
+          //   type: String,
+          //   computed: 'getPostBody(user_question)'
+          // },
+          //-----------------------------------------
+          user: {
+          value: function() {
+            return {name: 'Carlos', lastReadMessage: {}};
           }
+        }
         } 
       }
-      sendQuestion (event) {
-            this.$.postMessage.generateRequest();
-      }
-      getPostBody (user_question) {
-          return {
-              "question": user_question
-          }
-      }
+      // sendQuestion (event) {
+      //       this.$.postMessage.generateRequest();
+      // }
+      // getPostBody (user_question) {
+      //     return {
+      //         "question": user_question
+      //     }
+      // }
     }
     
     window.customElements.define(ChatbotIngApp.is, ChatbotIngApp);
