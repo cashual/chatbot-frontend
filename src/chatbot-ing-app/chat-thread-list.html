@@ -8,31 +8,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
 
 <dom-module id="chat-thread-list">
 
   <template>
 
-    <paper-toolbar>
+    <app-layout>
       <paper-icon-button icon="inbox" id="inbox"></paper-icon-button>
       <div class="title">Threads</div>
-      <paper-badge for="inbox" label="{{_computeUnreadCount(user.lastReadMessage.*, threads.*)}}"></paper-badge>
-    </paper-toolbar>
+      <paper-badge for="inbox" label={{test}}></paper-badge>
+    </app-layout>
 
     <paper-menu selected="{{_selectedIndex}}">
       <template is="dom-repeat" items="{{threads}}">
         <paper-item>
           <paper-item-body two-line>
-            <div>
-              <iron-icon icon="communication:textsms" hidden$="{{_computeThreadRead(item.messages.length, item.id, user.lastReadMessage.*)}}"></iron-icon>
+            <!-- <div>
+              <iron-icon icon="communication:textsms" hidden$={{test2}}></iron-icon>
               <span>{{item.title}}</span>
-            </div>
+            </div> -->
             <div secondary>{{item.lastMessage}}</div>
           </paper-item-body>
         </paper-item>
@@ -60,6 +61,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               selectedThread: {
                 notify: true
+              },
+
+              test: {
+                observer : "_computeUnreadCount(user.lastReadMessage.*, threads.*)"
+              },
+
+              test2: {
+                computed : "_computeThreadRead(item.messages.length, item.id, user.lastReadMessage.*)"
               }
             }
           }

@@ -1,86 +1,60 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-card/paper-card.html">
-
-
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../../bower_components/app-layout/app-layout.html"
+
 <link rel="import" href="chat-thread-list.html">
 <link rel="import" href="chat-thread-view.html">
 
 
 <dom-module id="chatbot-ing-app">
   <template>
-      <style>
-			:host {
+    <style>
+      :host {
         font-family: 'Muli', 'Helvetica Neue', helvetica, arial;
         display: block;
-			}
+      }
     </style>
-    
-		<!-- <paper-input value="{{user_question}}" label="Please how can i help you?"></paper-input>
-		<div>
-			<paper-button raised on-tap="sendQuestion">Ask me!</paper-button>
-    </div> -->
 
-    <iron-ajax url="threads.json" last-response="{{threads}}" auto></iron-ajax>
+    <!-- <iron-ajax url="threads.json" last-response="{{threads}}" auto></iron-ajax> -->
 
     <app-layout>
-      <chat-thread-list drawer user="{{user}}" threads="{{threads}}" selected-thread="{{selectedThread}}"></chat-thread-list>
+      <chat-thread-list drawer user="{{user}}" threads="{{thread}}" selected-thread="{{selectedThread}}"></chat-thread-list>
 
-      <chat-thread-view main user="{{user}}" thread="{{selectedThread}}"></chat-thread-view>
+      <!-- <chat-thread-view main user="{{user}}" thread="{{selectedThread}}"></chat-thread-view> -->
     </app-layout>
 
-    <!-- <iron-ajax
-				url="http://localhost:9292/question"
-				id="postMessage"
-				handle-as="json"
-				content-type="application/json"
-				method="POST"
-				body='{{postBody}}'></iron-ajax> -->
   </template>
 
   <script>
 
-    /**
-     * @customElement
-     * @polymer
-     */
     class ChatbotIngApp extends Polymer.Element {
       static get is() { return 'chatbot-ing-app'; }
       static get properties() {
         return {
-          // user_question: {
-          //   type: String,
-          //   notify: true,
-          // },
-          // getBody: {
-          //   typr: String
-          // },
-          // postBody: {
-          //   type: String,
-          //   computed: 'getPostBody(user_question)'
-          // },
-          //-----------------------------------------
           user: {
-          value: function() {
-            return {name: 'Carlos', lastReadMessage: {}};
+            type: Object,
+            value: function () {
+              return {
+                name: 'Carlos', lastReadMessage: {}
+              };
+            }
+          },
+          thread: {
+            value: function () {
+              return [{
+                "id": "0",
+                "title": "Emoji Chat",
+                "messages": [],
+                "lastMessage": "Hmmm, dunno.  Ask the emojineer on the team, she'll know."
+
+              }]
+            }
           }
         }
-        } 
       }
-      // sendQuestion (event) {
-      //       this.$.postMessage.generateRequest();
-      // }
-      // getPostBody (user_question) {
-      //     return {
-      //         "question": user_question
-      //     }
-      // }
     }
-    
+
     window.customElements.define(ChatbotIngApp.is, ChatbotIngApp);
   </script>
 </dom-module>
